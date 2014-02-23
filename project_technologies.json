@@ -1,13 +1,13 @@
 {
     "technologies": {
         "apis": [
-            "insert apis"
+            “Maps”
         ],
         "platforms": [
-            "insert platforms"
+            “openframeworks”
         ],
         "toolkits": [
-            "insert toolkits"
+            “opencv”
         ]
     },
     "themes": [
