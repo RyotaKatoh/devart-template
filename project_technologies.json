@@ -1,20 +1,21 @@
 {
     "technologies": {
         "apis": [
-            “maps”
+            "maps",
+            
         ],
         "platforms": [
-            “iOS”,
-	    “android”
+            "iOS",
+	    "android"
         ],
         "toolkits": [
-            “openframeworks”,
-	    “opencv”
+            "openframeworks",
+	    "opencv"
         ]
     },
     "themes": [
-        “geoglyph”,
-        “fun”,
-        “mystery”
+        "geoglyph",
+        "fun",
+        "mystery"
     ]
 }
