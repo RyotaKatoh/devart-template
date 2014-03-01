@@ -14,6 +14,98 @@ var separateFlag;
 
 // initialize map
 
+
+/* directionDisplayClass definition */
+
+function directionDisplayClass(start, end, waypoints){
+
+    this.start = start;
+    this.end   = end;
+    this.waypoints = waypoints;
+    
+    this.directionsDisplay = new google.maps.DirectionsRenderer({
+	
+        suppressMarkers: true,
+        preserveViewport: true
+        
+    });
+    
+    
+    this.directionsDisplay.setMap(map);
+    
+    
+}
+
+directionDisplayClass.prototype.getStart = function(){
+
+    return this.start;
+
+}
+
+directionDisplayClass.prototype.getEnd = function(){
+
+    return this.end;
+    
+}
+
+directionDisplayClass.prototype.getWaypoints = function(){
+
+    return this.waypoints;
+
+}
+
+directionDisplayClass.prototype.drawDirection = function(){
+
+    var request = {
+        origin:this.start,
+        destination:this.end,
+        travelMode: google.maps.TravelMode.DRIVING,
+        waypoints: this.waypoints,
+        optimizeWaypoints: false
+    }
+    
+    directionsService.route(request, function(response, status) {
+        
+        if (status == google.maps.DirectionsStatus.OK) {
+        
+            this.directionsDisplay.setDirections(response);
+        }
+    })
+    
+}
+                            
+var testStart = 'Tokyo';
+var testEnd   = 'Utsunomiya';
+var testWaypoint = [];
+testWaypoint.push({
+     location: 'Saitama',
+     stopover: true         
+});
+
+var rend1 = new google.maps.DirectionsRenderer({
+	
+    suppressMarkers: true,
+    preserveViewport: true
+        
+});
+
+var rend2 = new google.maps.DirectionsRenderer({
+	
+    suppressMarkers: true,
+    preserveViewport: true
+    
+});
+    
+var testDirection = new directionDisplayClass(testStart, testEnd, testWaypoint);
+    
+
+var test2Start = 'Maebashi';
+var test2End   = 'Kamakura';
+var test2Waypoint = [];
+
+var test2Direction = new directionDisplayClass(test2Start, test2End, test2Waypoint);
+
+
 function initialize() {
 	
     /* polyline style */
@@ -71,6 +163,7 @@ function initialize() {
     
     /* set event listener */
     google.maps.event.addListener(map, 'click', function(event) {
+        /*
         console.log(event.latLng);
         
         route.push({
@@ -78,8 +171,47 @@ function initialize() {
         });
         
         calcTotallRoute();
+        */
         
+//        testDirection.drawDirection();
+//        alert(testDirection.getStart());
+//        alert(test2Direction.getStart());
+//        
+//        test2Direction.drawDirection();
+        
+        var request = {
+        origin:testStart,
+        destination:testEnd,
+        travelMode: google.maps.TravelMode.DRIVING,
+        waypoints: testWaypoint,
+        optimizeWaypoints: false
+    }
+    
+    directionsService.route(request, function(response, status) {
+        
+        if (status == google.maps.DirectionsStatus.OK) {
+        
+            rend1.setDirections(response);
+        }
     });
+        
+            var request = {
+        origin:test2Start,
+        destination:test2End,
+        travelMode: google.maps.TravelMode.DRIVING,
+        waypoints: test2Waypoint,
+        optimizeWaypoints: false
+    }
+    
+    directionsService.route(request, function(response, status) {
+        
+        if (status == google.maps.DirectionsStatus.OK) {
+        
+            rend2.setDirections(response);
+        }
+    });
+        
+    })
     
 }
 
