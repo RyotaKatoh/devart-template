@@ -1,19 +1,16 @@
 {
     "technologies": {
         "apis": [
-            "maps"
+            "insert apis"
         ],
         "platforms": [
-            “Mac os X”
+            "insert platforms"
         ],
         "toolkits": [
-            "openframeworks",
-            "openCV”
+            "insert toolkits"
         ]
     },
     "themes": [
-        “geoglph”,
-        “Fun”,
-        “Play”
+        "insert themes"
     ]
 }
