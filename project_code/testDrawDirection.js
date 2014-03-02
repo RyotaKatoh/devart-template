@@ -28,8 +28,9 @@ function initialize() {
 
     /* define Map object */
     var mapCenter = new google.maps.LatLng(35.634593,139.695104);
+    
     var mapOptions = {
-        zoom:14,
+        zoom:13,
         center: mapCenter,
         disableDefaultUI: true,
         //draggable: false,
@@ -39,7 +40,8 @@ function initialize() {
     map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
     
     /* map style options */
-    var styleOptions = [{
+    var styleOptions = [
+        {
         featureType: 'all',
           
         elementType: 'labels',
@@ -60,8 +62,9 @@ function initialize() {
     
     
     /* set event listener */
+    
     google.maps.event.addListener(map, 'click', function(event) {
-
+        
         var latlng = new google.maps.LatLng(event.latLng.lat(),event.latLng.lng());
  
         marker = new google.maps.Marker({
@@ -73,7 +76,9 @@ function initialize() {
         markerArray.push(marker);
     });
     
+    
 }
+
 
 
 function drawDirection(){

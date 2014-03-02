@@ -2,7 +2,7 @@
 Nazca
 
 ## Authors
-[Tomohiro Nagata]
+[Tomohiro Nagata](https://github.com/tomo461 “TomohiroNagata”) / Researcher, Engineer, Programmer
 [Ryota Katoh](https://github.com/RyotaKatoh/ "RyotaKatoh") / Engineer, Programmer
 
 
@@ -22,7 +22,7 @@ coming soon.
 
 ## Links to External Libraries
 
-coming soon.
+[Awesomium](http://www.awesomium.com/ “Awesomium”)
 
 ## Images & Videos
 
