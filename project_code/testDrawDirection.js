@@ -149,7 +149,7 @@ function resetMarker(){
     
     markerArray.splice(0, markerArray.length);
     
-    console.log(markerArray.length);
+    //console.log(markerArray.length);
     
 }
 
@@ -157,6 +157,68 @@ function resetMap(){
 
     location.reload();
 }
+
+
+/* freedom code area */
+function test(){
+
+//    for(var i=0;i< 10;i++){
+//        var lat = 35.634593 + 0.001*i;
+//        var lng = 139.695104 + 0.001*i;
+//        var latlng = new google.maps.LatLng(lat,lng);
+// 
+//        marker = new google.maps.Marker({
+//            map:map,
+//            position: latlng,
+//        });
+// 
+//        marker.setMap(map);
+//        markerArray.push(marker);   
+//    }
+    
+//    testLatLngBound();
+    
+    setMarker(35.634593, 139.695104);
+}
+
+
+function testLatLngBound(){
+    var bounds = map.getBounds();
+    var maxX = bounds.getNorthEast().lng();//東
+    var minX = bounds.getSouthWest().lng();//西
+    var maxY = bounds.getNorthEast().lat();//北
+    var minY = bounds.getSouthWest().lat();//南
+    
+    var val = {
+        maxX: maxX,
+        maxY: maxY,
+        minX: minX,
+        minY: minY
+    };
+    
+    return val;
+}
+
+function setMarker(argLat, argLng) {
+    
+    var myLatlng = new google.maps.LatLng(argLat,argLng);
+    var marker = new google.maps.Marker({
+        map: map,
+        position: myLatlng
+    }); 
+    marker.setMap(map);
+    markerArray.push(marker);
+    
+}
+
+var testVal = 100;
+
+function testArg(arg1, arg2){
+
+    return arg1 + arg2;
+}
+
+/* END FREEDOM CODE AREA */
 
 google.maps.event.addDomListener(window, 'load', initialize);
 
