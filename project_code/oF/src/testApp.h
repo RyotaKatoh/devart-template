@@ -15,7 +15,9 @@
 #define MAP_FRAME_SIZE_HEIGHT		480
 #define FRAME_LINE_WIDTH			5
 
-#define SIM_SPEED_STEP	0.25
+#define WAYPOINTS_LIMIT		10
+
+#define SIM_SPEED_STEP		0.25
 
 class testApp : public ofBaseApp {
 public:
@@ -45,5 +47,5 @@ public:
 	float	simRenderScale;
 	ofPoint	simRenderOffset;
 #endif
-	vector< vector<ofPoint> > wayPoints;
+	vector< vector<ofPoint> > waypoints;
 };

@@ -56,20 +56,26 @@ void testApp::update() {
 			contFinder.findContours(edge);
 			
 			// way points setting
-			for (int i = 0; i < wayPoints.size(); i++) {
-				wayPoints[i].clear();
+			for (int i = 0; i < waypoints.size(); i++) {
+				waypoints[i].clear();
 			}
-			wayPoints.clear();
+			waypoints.clear();
 			
 			for (int i = 0; i < contFinder.getContours().size(); i++) {
+				if (contFinder.getContour(i).size() < 10) {
+					continue;
+				}
 				vector <ofPoint> tmpPoint;
 				for (int j = 0; j < contFinder.getContour(i).size(); j++) {
 					ofPoint point;
 					point.x = (float)contFinder.getContours()[i][j].x / edge.width;		// normalized
 					point.y = (float)contFinder.getContours()[i][j].y / edge.height;
 					tmpPoint.push_back(point);
+					if ( (j % WAYPOINTS_LIMIT == WAYPOINTS_LIMIT - 1) || (j == contFinder.getContour(i).size() - 1) ) {
+						waypoints.push_back(tmpPoint);
+						tmpPoint.clear();
+					}
 				}
-				wayPoints.push_back(tmpPoint);
 			}
 			
 			// image fitting
@@ -154,13 +160,15 @@ void testApp::draw() {
 	ofPoint pointPrev;
 	ofPoint point;
 	int cnt = 0;
-	for (int i = 0; i < wayPoints.size(); i++) {
-		pointPrev = wayPoints[i][0];
+	cout << "regions: " << waypoints.size() << endl;
+	for (int i = 0; i < waypoints.size(); i++) {
+		pointPrev = waypoints[i][0];
 		pointPrev *= simRenderScale;
 		pointPrev += simRenderOffset;
-		for (int j = 0; j < wayPoints[i].size(); j = j + simRenderStep) {
+		cout << " waypoints in region " << i << ": " << waypoints[i].size() << endl;
+		for (int j = 0; j < waypoints[i].size(); j = j + simRenderStep) {
 			cnt++;
-			point = wayPoints[i][j];
+			point = waypoints[i][j];
 			point *= simRenderScale;
 			point += simRenderOffset;
 			if ( cnt > simRenderPointCnt) {
