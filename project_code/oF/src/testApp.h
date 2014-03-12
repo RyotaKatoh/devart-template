@@ -4,6 +4,9 @@
 #include "ofxOpenCv.h"
 #include "ofxCv.h"
 
+#include "ofxAwesomium.h"
+
+
 #define CAM_WIDTH			640
 #define CAM_HEIGHT			480
 
@@ -48,4 +51,13 @@ public:
 	ofPoint	simRenderOffset;
 #endif
 	vector< vector<ofPoint> > waypoints;
+    
+    ofxAwesomium    myAwesomium;
+    ofPoint         awesomiumOffset;
+    float           awesomiumScale;
+    
+    /* debug variables */
+    int frameRate;
+    bool drawFlag;
+    
 };
