@@ -33,7 +33,9 @@ void testApp::setup() {
 
 void testApp::update() {
 	
-	grabber.update();
+    if(!drawFlag)
+        grabber.update();
+    
 	if (grabber.isFrameNew()) {
 		cam.clear();
 		cam.setFromPixels(grabber.getPixels(), CAM_WIDTH, CAM_HEIGHT);
@@ -157,6 +159,22 @@ void testApp::update() {
             for(int j=0;j<waypoints[numLine].size();j++){
                 
                 point = waypoints[numLine][j];
+                
+                // point fitting
+                float frameScale;
+                if(EDGE_FRAME_SIZE_WIDTH > EDGE_FRAME_SIZE_HEIGHT){
+                
+                    frameScale = EDGE_FRAME_SIZE_HEIGHT / (float)EDGE_FRAME_SIZE_WIDTH;
+                    point.x = ofMap(point.x, 0.0, 1.0, 0.5 - frameScale/2, 0.5 + frameScale/2);
+                    
+                    
+                }
+                else{
+                    frameScale = EDGE_FRAME_SIZE_WIDTH / (float)EDGE_FRAME_SIZE_HEIGHT;
+                    
+                    point.y = ofMap(point.y, 0.0, 1.0, 0.5 - frameScale/2, 0.5 + frameScale/2);
+                }
+                
                 
                 lat = ofMap(point.x, 0, 1.0, myAwesomium.minX, myAwesomium.maxX);
                 lng = ofMap(point.y, 0, 1.0, myAwesomium.maxY, myAwesomium.minY);
