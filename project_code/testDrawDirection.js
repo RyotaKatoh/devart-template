@@ -27,10 +27,10 @@ function initialize() {
 
 
     /* define Map object */
-    var mapCenter = new google.maps.LatLng(35.634593,139.695104);
+    var mapCenter = new google.maps.LatLng(48.6444967,15.2375355);
     
     var mapOptions = {
-        zoom:13,
+        zoom:9,
         center: mapCenter,
         disableDefaultUI: true,
         //draggable: false,
@@ -123,18 +123,28 @@ function drawDirection(){
         optimizeWaypoints: true
     }
 
+    var statusMessage = "not get status";
     directionsService.route(request, function(response, status) {
         
         if (status == google.maps.DirectionsStatus.OK) {
     
             console.log("status is OK");
          
+            statusMessage = "drection is drawed.";
             directionDisplayArray[numDirectionDisplay - 1].setDirections(response);
             
             console.log("draw?");
         
+            
+        }
+        
+        else{
+        
+            statusMessage = "direction is not drawed.";
         }
     });
+    
+    return statusMessage;
     
 }
 
@@ -182,7 +192,7 @@ function test(){
 }
 
 
-function testLatLngBound(){
+function getLatLngBound(){
     var bounds = map.getBounds();
     var maxX = bounds.getNorthEast().lng();//東
     var minX = bounds.getSouthWest().lng();//西
@@ -204,14 +214,14 @@ function setMarker(argLat, argLng) {
     var myLatlng = new google.maps.LatLng(argLat,argLng);
     var marker = new google.maps.Marker({
         map: map,
-        position: myLatlng
+        position: myLatlng,
+        visible: true
     }); 
     marker.setMap(map);
     markerArray.push(marker);
     
 }
 
-var testVal = 100;
 
 function testArg(arg1, arg2){
 

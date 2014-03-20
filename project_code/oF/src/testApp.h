@@ -4,6 +4,8 @@
 #include "ofxOpenCv.h"
 #include "ofxCv.h"
 #include "ofxOpenNI.h"
+#include "ofxAwesomium.h"
+
 
 //--------------------------------------------------------------
 //#define	USE_MAC_CAM
@@ -69,4 +71,12 @@ public:
 	float	simRenderScale;
 	ofPoint	simRenderOffset;
 #endif /* ifdef SIM_RENDERING */
+    
+    ofxAwesomium    myAwesomium;
+    ofPoint         awesomiumOffset;
+    float           awesomiumScale;
+    
+    /* debug variables */
+    int frameRate;
+    bool drawFlag;    
 };

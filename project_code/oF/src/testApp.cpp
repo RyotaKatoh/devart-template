@@ -50,6 +50,13 @@ void testApp::setup() {
 	simRenderOffset.x = CAM_FRAME_SIZE_WIDTH;
 	simRenderOffset.y = 0;
 #endif /* ifdef SIM_RENDERING */
+
+    myAwesomium.setup(MAP_FRAME_SIZE_WIDTH, MAP_FRAME_SIZE_HEIGHT);
+    awesomiumOffset.x = CAM_FRAME_SIZE_WIDTH;
+    awesomiumOffset.y = 0;
+
+    frameRate = 0;
+    drawFlag  = false;
 }
 
 
@@ -58,6 +65,9 @@ void testApp::update() {
 	
 #ifdef USE_MAC_CAM
 	grabber.update();
+    if(!drawFlag)
+        grabber.update();
+    
 	if (grabber.isFrameNew()) {
 		cam.setFromPixels(grabber.getPixels(), CAM_WIDTH, CAM_HEIGHT, OF_IMAGE_COLOR);
 		cam.mirror(false, true);
@@ -151,6 +161,66 @@ void testApp::update() {
 		simRenderPointCnt = 0.0;
 	}
 #endif /* ifdef SIM_RENDERING */
+    
+    myAwesomium.update();
+    
+    frameRate ++;
+    
+    if(drawFlag){
+		
+        double lat, lng;
+        
+        //        lat = ofRandom(myAwesomium.minX, myAwesomium.maxX);
+        //        lng = ofRandom(myAwesomium.minY, myAwesomium.maxY);
+        //
+        //        myAwesomium.setMarker(lat, lng);
+        //
+        
+        ofPoint point;
+        
+        static int numLine = 0;
+        if(frameRate > 25){
+            
+            
+            frameRate = 0;
+            
+            if(numLine < waypoints.size()){
+				
+				for(int j=0;j<waypoints[numLine].size();j++){
+					
+					point = waypoints[numLine][j];
+					
+					// point fitting
+					float frameScale;
+					if(EDGE_FRAME_SIZE_WIDTH > EDGE_FRAME_SIZE_HEIGHT){
+						
+						frameScale = EDGE_FRAME_SIZE_HEIGHT / (float)EDGE_FRAME_SIZE_WIDTH;
+						point.x = ofMap(point.x, 0.0, 1.0, 0.5 - frameScale/2, 0.5 + frameScale/2);
+						
+						
+					}
+					else{
+						frameScale = EDGE_FRAME_SIZE_WIDTH / (float)EDGE_FRAME_SIZE_HEIGHT;
+						
+						point.y = ofMap(point.y, 0.0, 1.0, 0.5 - frameScale/2, 0.5 + frameScale/2);
+					}
+					
+					
+					lat = ofMap(point.x, 0, 1.0, myAwesomium.minX, myAwesomium.maxX);
+					lng = ofMap(point.y, 0, 1.0, myAwesomium.maxY, myAwesomium.minY);
+					
+					myAwesomium.setMarker(lat, lng);
+					
+				}
+				
+				numLine ++;
+				
+				
+				myAwesomium.drawDirection();
+				myAwesomium.resetMarker();
+            }
+		}
+    }
 }
 
 
@@ -255,15 +325,16 @@ void testApp::draw() {
 	ofRect(0, CAM_FRAME_SIZE_HEIGHT, EDGE_FRAME_SIZE_WIDTH, EDGE_FRAME_SIZE_HEIGHT);
 	ofRect(CAM_FRAME_SIZE_WIDTH, 0, MAP_FRAME_SIZE_WIDTH, MAP_FRAME_SIZE_HEIGHT);
 
-#ifdef SIM_RENDERING
+//#ifdef SIM_RENDERING
 	// string rendering
 	ofSetColor(255);
 	ofFill();
 	string info = "Frame Rate: " + ofToString(ofGetFrameRate(), 2) + "\n";
-	info += "Rendering Speed: " + ofToString(simRenderSpeed, 2) + "\n";
-	info += "Resolution: " + ofToString(simRenderStep);
+	//info += "Rendering Speed: " + ofToString(simRenderSpeed, 2) + "\n";
+	//info += "Resolution: " + ofToString(simRenderStep);
 	ofDrawBitmapStringHighlight(info, 0, ofGetHeight() - 30);
 #endif /* ifdef SIM_RENDERING */
+
 	
 #ifdef SIM_RENDERING
 	// waypoints rendering
@@ -293,6 +364,62 @@ void testApp::draw() {
 	}
 	simRenderPointCnt = 0.0;
 #endif /* ifdef SIM_RENDERING */
+
+    myAwesomium.draw(awesomiumOffset.x, awesomiumOffset.y);
+    
+    
+//#ifdef SIM_RENDERING
+    //	// face contour rendering to google Map
+    //	ofPoint pointPrev;
+    //	ofPoint point;
+    //	int cnt = 0;
+    //
+    //
+    //    if(cnt == 0){
+    //        cnt ++;
+    //    int tmp = 0;
+    //    while(wayPoints[tmp].size() < MAX_NUM_MARKER){
+    //
+    //        tmp ++;
+    //
+    //    }
+    //
+    //    double lat, lng;
+    //    for(int i=0;i<10;i++){
+    //        lat = ofMap(wayPoints[tmp][i].x, 0, CAM_FRAME_SIZE_WIDTH, myAwesomium.minX, myAwesomium.maxX);
+    //        lng = ofMap(wayPoints[tmp][i].y, 0, CAM_FRAME_SIZE_HEIGHT, myAwesomium.minY, myAwesomium.maxY);
+    //
+    //        printf("%lf, %lf\n", lat, lng);
+    //
+    //        myAwesomium.setMarker(lat, lng);
+    //
+    //
+    //    }
+    //    myAwesomium.drawDirection();
+    //    }
+    //	for (int i = 0; i < wayPoints.size(); i++) {
+    //		pointPrev = wayPoints[i][0];
+    //		pointPrev *= simRenderScale;
+    //		pointPrev += simRenderOffset;
+    //
+    //
+    //        simRenderStep =  round(wayPoints[i].size() / MAX_NUM_MARKER);
+    //
+    //
+    //		for (int j = 0; j < wayPoints[i].size(); j = j + simRenderStep) {
+    //			cnt++;
+    //			point = wayPoints[i][j];
+    //			point *= simRenderScale;
+    //			point += simRenderOffset;
+    //			if ( cnt > simRenderPointCnt) {
+    //				ofCircle(point.x, point.y, 10);
+    //				return;
+    //			}
+    //			ofLine(pointPrev.x, pointPrev.y, point.x, point.y);
+    //			pointPrev = point;
+    //		}
+    //	}
+    //	simRenderPointCnt = 0.0;
 }
 
 
@@ -320,6 +447,13 @@ void testApp::keyPressed( int key ) {
                 kinect[deviceID].stop();
             }
             break;
+		
+		case 'a':
+			if(drawFlag)
+				drawFlag = false;
+			else
+				drawFlag = true;
+			break;
 	}
 #endif /* ifdef USE_MAC_CAM */
 	
@@ -336,6 +470,63 @@ void testApp::keyPressed( int key ) {
 		simRenderStep = 1;
 	}
 #endif /* ifdef SIM_RENDERING */
+
+        
+//        for(int i=0;i<waypoints[0].size();i++){
+//            
+//
+//            point = waypoints[0][i];
+//            
+//            lat = ofMap(point.x, 0, 1.0, myAwesomium.minX, myAwesomium.maxX);
+//            lng = ofMap(point.y, 0, 1.0, myAwesomium.maxY, myAwesomium.minY);
+//            
+//            printf("faceLatLng(%lf, %lf)\n",lat, lng);
+//            
+//            myAwesomium.setMarker(lat, lng);
+//            
+//        }
+        
+//        lat = ofMap(waypoints[0][0].x, 0, CAM_FRAME_SIZE_WIDTH, myAwesomium.minX, myAwesomium.maxX);
+//        lng = ofMap(waypoints[0][0].y, 0, CAM_FRAME_SIZE_HEIGHT, myAwesomium.maxY, myAwesomium.minY);
+//        
+//        printf("(lat, lng): (%lf, %lf)\n",lat, lng);
+//        
+//        
+//        myAwesomium.setMarker(lat, lng);
+    
+    
+//        ofPoint point;
+//        
+//        int numMarker = 0;
+//        
+//        for(int i=0;i<waypoints.size();i++){
+//            
+//
+//            for(int j=0;j<waypoints[i].size();j++){
+//                
+//                point = waypoints[i][j];
+//                //point *= simRenderScale;
+//                
+//                lat = ofMap(point.x, 0, CAM_FRAME_SIZE_WIDTH, myAwesomium.minX, myAwesomium.maxX);
+//                lng = ofMap(point.y, 0, CAM_FRAME_SIZE_HEIGHT, myAwesomium.maxY, myAwesomium.minY);
+//                
+//                //printf("waypoint[i][j]:%f, %f",wayPoints[i][j].x, wayPoints[i][j].y);
+//                //printf("lat lng:%f, %f", lat, lng);
+//                
+//                myAwesomium.setMarker(lat, lng);
+//                //                numMarker++;
+//                //                if(numMarker >= 10){
+//                //                    myAwesomium.drawDirection();
+//                //                    myAwesomium.resetMarker();
+//                //                    numMarker = 0;
+//                //                }
+//            }
+//            
+//
+//        }
+//    }
+    
+    myAwesomium.keyPressed(key);
 }
 
 
