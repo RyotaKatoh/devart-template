@@ -3,7 +3,13 @@
 #include "ofMain.h"
 #include "ofxOpenCv.h"
 #include "ofxCv.h"
+#include "ofxOpenNI.h"
 
+//--------------------------------------------------------------
+//#define	USE_MAC_CAM
+
+
+//--------------------------------------------------------------
 #define CAM_WIDTH			640
 #define CAM_HEIGHT			480
 
@@ -19,6 +25,10 @@
 
 #define SIM_SPEED_STEP		0.25
 
+#define MAX_DEVICES 2
+
+
+//--------------------------------------------------------------
 class testApp : public ofBaseApp {
 public:
 	void setup();
@@ -29,23 +39,34 @@ public:
     void mousePressed(int x, int y, int button);
     void mouseReleased(int x, int y, int button);
 	
+	void updateWaypoints(void);
+	void updateSimRenderingSettings(void);
+	void userEvent(ofxOpenNIUserEvent & event);
+	
+#ifdef USE_MAC_CAM
 	ofVideoGrabber	grabber;
-	ofxCvColorImage	cam;
-	ofImage			gray, edge, tmp;
+	ofImage			cam, edge, mask, tmp;
 	
 	ofRectangle			faceRect;
 	ofxCv::ObjectFinder faceFinder;
-	ofxCv::ContourFinder contFinder;
-		
+	
+	float	maskFrameScale;
+	ofPoint	maskFrameOffset;
+#else /* ifdef USE_MAC_CAM */
+	int			numDevices;
+	ofxOpenNI	kinect[MAX_DEVICES];
+	ofImage		mask;
+#endif /* ifdef USE_MAC_CAM */
+
 	bool	isShot;
-	float	edgeFrameScale;
-	ofPoint	edgeFrameOffset;
+	ofxCv::ContourFinder contFinder;
+	vector< vector<ofPoint> > waypoints;
+	
 #ifdef SIM_RENDERING
 	int		simRenderStep;
 	float	simRenderPointCnt;
 	float	simRenderSpeed;
 	float	simRenderScale;
 	ofPoint	simRenderOffset;
-#endif
-	vector< vector<ofPoint> > waypoints;
+#endif /* ifdef SIM_RENDERING */
 };
