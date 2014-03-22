@@ -1,5 +1,4 @@
-# Project Title
-Nazca
+# Nazca
 
 ## Authors
 [Tomohiro Nagata](https://github.com/tomo461 “TomohiroNagata”) / Researcher, Engineer, Programmer
