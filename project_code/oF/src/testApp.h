@@ -32,6 +32,8 @@ public:
     void mousePressed(int x, int y, int button);
     void mouseReleased(int x, int y, int button);
 	
+    void setWaypoints();
+    
 	ofVideoGrabber	grabber;
 	ofxCvColorImage	cam;
 	ofImage			gray, edge, tmp;

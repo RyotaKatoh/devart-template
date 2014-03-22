@@ -27,10 +27,12 @@ void ofxAwesomium::setup(int windowWidth, int windowHeight){
     
     webView->Focus();
     
+    isReadBoundsInfo = false;
     
     /* webImage is to draw webView image. */
     webImage.allocate(webViewWidth, webViewHeigh, OF_IMAGE_COLOR_ALPHA);
-    
+
+   
 }
 
 
@@ -49,20 +51,11 @@ void ofxAwesomium::update(){
     }
     
     /* set max min LatLng information. */
-    if(!webView->IsLoading()){
-        WebString func = WSLit("getLatLngBound();");
-        WebString xpath = WSLit("");
-        JSValue myValue = webView->ExecuteJavascriptWithResult(func, xpath);
-        
-        if(myValue.IsObject()) {
-            JSObject& latLng = myValue.ToObject();
-            
-            maxX = latLng.GetProperty(WSLit("maxX")).ToDouble();
-            maxY = latLng.GetProperty(WSLit("maxY")).ToDouble();
-            minX = latLng.GetProperty(WSLit("minX")).ToDouble();
-            minY = latLng.GetProperty(WSLit("minY")).ToDouble();
-            
-        }
+    /* set JS variables. */
+    if(!webView->IsLoading() && !isReadBoundsInfo){
+       
+        setLatLngBounds();
+        setNumLine();
         
     }
     
@@ -126,12 +119,45 @@ void ofxAwesomium::setMarker(double lat, double lng){
         JSValue arg1 = JSValue(lat);
         JSValue arg2 = JSValue(lng);
         
-        args.Push(arg2);
+        //args.Push(arg2);
         args.Push(arg1);
+        args.Push(arg2);
         
         window.ToObject().Invoke(WSLit("setMarker"), args);
         
     }
+    
+}
+
+void ofxAwesomium::setMarkerOfWaypoint(double lat, double lng, int flag){
+    
+    // flag == 100 separate waypoint
+    
+    JSValue window = webView->ExecuteJavascriptWithResult(WSLit("window"), WSLit(""));
+    
+    if (window.IsObject()) {
+        
+        JSArray args;
+        JSValue arg1 = JSValue(lat);
+        JSValue arg2 = JSValue(lng);
+        JSValue arg3 = JSValue(flag);
+       
+      
+        args.Push(arg1);
+        args.Push(arg2);
+        args.Push(arg3);
+        
+        window.ToObject().Invoke(WSLit("setWaypoints"), args);
+        
+    }
+    
+}
+
+void ofxAwesomium::drawFaceWithDirection(){
+    WebString func = WSLit("drawFaceWithDirection();");
+    WebString xpath = WSLit("");
+    
+    webView->ExecuteJavascript(func, xpath);
     
 }
 
@@ -174,8 +200,8 @@ void ofxAwesomium::setRandomMarker(int numMarker){
 
     for(int i=0;i<numMarker;i++){
         double randX, randY;
-        randX = ofRandom((float)minX, (float)maxX);
-        randY = ofRandom((float)minY, (float)maxY);
+        randX = ofRandom((float)minLat, (float)maxLat);
+        randY = ofRandom((float)minLng, (float)maxLng);
         
         printf("setRandomMarket:(lat, lng): (%lf, %lf)\n",randX, randY);
         
@@ -215,4 +241,50 @@ void ofxAwesomium::keyPressed(int key){
     
 }
 
+void ofxAwesomium::setLatLngBounds(){
+   
+    WebString func = WSLit("getLatLngBound();");
+    WebString xpath = WSLit("");
+    JSValue myValue = webView->ExecuteJavascriptWithResult(func, xpath);
+    
+    if(myValue.IsObject()) {
+        JSObject& latLng = myValue.ToObject();
+        
+        maxLat = latLng.GetProperty(WSLit("maxLat")).ToDouble();
+        maxLng = latLng.GetProperty(WSLit("maxLng")).ToDouble();
+        minLat = latLng.GetProperty(WSLit("minLat")).ToDouble();
+        minLng = latLng.GetProperty(WSLit("minLng")).ToDouble();
+        
+        isReadBoundsInfo = true;
+        
+        printf("maxLat, minLat:%lf, %lf\n",maxLat, minLat);
+        printf("maxLng, minLng:%lf, %lf\n",maxLng, minLng);
+    }
+    
+}
 
+void ofxAwesomium::setNumLine(){
+
+    WebString func = WSLit("getNumLine();");
+    WebString xpath = WSLit("");
+    JSValue myValue = webView->ExecuteJavascriptWithResult(func, xpath);
+    
+    
+    numLine = myValue.ToInteger();
+        
+//    printf("numLine: %d\n",numLine);
+    
+}
+
+void ofxAwesomium::setDebugVal(){
+    
+    WebString func = WSLit("getDebugVal();");
+    WebString xpath = WSLit("");
+    JSValue myValue = webView->ExecuteJavascriptWithResult(func, xpath);
+    
+    
+    debugVal = myValue.ToInteger();
+    
+//    printf("debugVal: %d\n", debugVal);
+    
+}

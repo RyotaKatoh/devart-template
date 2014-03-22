@@ -17,7 +17,7 @@
 #include <Awesomium/BitmapSurface.h>
 
 
-#define URL     "http://127.0.0.1:49903/testDrawDirection.html"
+#define URL     "http://127.0.0.1:49514/testDrawDirection.html"
 
 #define MAX_POINT   10
 
@@ -38,6 +38,14 @@ public:
     void drawDirection();
     void resetMarker();
     void resetMap();
+    void setMarkerOfWaypoint(double lat, double lng,int flag);
+    void drawFaceWithDirection();
+    
+    /* set JS Variables */
+    void setLatLngBounds();
+    void setNumLine();
+    
+    void setDebugVal();
     
     void setRandomMarker(int numMarker);
     
@@ -47,7 +55,11 @@ public:
     
     ofImage webImage;
     
-    double  maxX, maxY, minX, minY;
+    bool    isReadBoundsInfo;
+    double  maxLat, maxLng, minLat, minLng;
+    int     numLine;
+    
+    int     debugVal;
     
 };
 
