@@ -1,6 +1,7 @@
 #include "testApp.h"
 
 
+
 //--------------------------------------------------------------
 using namespace ofxCv;
 using namespace cv;
@@ -442,10 +443,12 @@ void testApp::setWaypoints(){
 }
 
 
+#ifndef USE_MAC_CAM
 //--------------------------------------------------------------
 void testApp::userEvent(ofxOpenNIUserEvent & event){
 	ofLogNotice() << getUserStatusAsString(event.userStatus) << "for user" << event.id << "from device" << event.deviceID;
 }
+#endif
 
 void testApp::keyPressed( int key ) {
 	
@@ -454,6 +457,18 @@ void testApp::keyPressed( int key ) {
 	if ( (key == ' ') && (faceFinder.size() != 0)) {
 		isShot = true;
 	}
+    
+    if(key == 'a'){
+        setWaypoints();
+        myAwesomium.drawFaceWithDirection();
+    }
+    
+    if(key == 'r'){
+    
+        myAwesomium.resetMap();
+        
+    }
+    
 	
 #else /* ifdef USE_MAC_CAM */
 	switch (key) {
@@ -468,11 +483,14 @@ void testApp::keyPressed( int key ) {
             break;
 		
 		case 'a':
-			if(drawFlag)
-				drawFlag = false;
-			else
-				drawFlag = true;
+            setWaypoints();
+            myAwesomium.drawFaceWithDirection();
 			break;
+            
+        case 'r':
+            myAwesomium.resetMap();
+            break;
+            
 	}
 #endif /* ifdef USE_MAC_CAM */
 	
@@ -492,38 +510,6 @@ void testApp::keyPressed( int key ) {
 #endif /* ifdef SIM_RENDERING */
     
     
-    if(key == 'a'){
-        
-        setWaypoints();
-        myAwesomium.drawFaceWithDirection();
-        
-    }
-    
-    if(key =='q'){
-    
-        myAwesomium.drawFaceWithDirection();
-    
-    }
-    
-    if(key == 'r'){
-    
-        myAwesomium.resetMap();
-
-        
-    }
-    
-    if(key == '1'){
-    
-        ofPoint test;
-        test.y = ofMap(ofGetHeight()/2, 0, ofGetHeight(), myAwesomium.minLat, myAwesomium.maxLat);
-        test.x = ofMap(10, 0, ofGetWidth(), myAwesomium.minLng, myAwesomium.maxLng);
-        
-        myAwesomium.setMarker(test.y, test.x);
-    }
-    
-
-    
-    //myAwesomium.keyPressed(key);
 }
 
 

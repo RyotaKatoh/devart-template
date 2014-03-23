@@ -3,13 +3,17 @@
 #include "ofMain.h"
 #include "ofxOpenCv.h"
 #include "ofxCv.h"
-#include "ofxOpenNI.h"
+//#include "ofxOpenNI.h"
 #include "ofxAwesomium.h"
 
 
 //--------------------------------------------------------------
-//#define	USE_MAC_CAM
 
+#define	USE_MAC_CAM
+
+#ifndef USE_MAC_CAM
+#include "ofxOpenNI.h"
+#endif
 
 //--------------------------------------------------------------
 #define CAM_WIDTH			640
@@ -46,7 +50,10 @@ public:
     
 	void updateWaypoints(void);
 	void updateSimRenderingSettings(void);
+    
+#ifndef USE_MAC_CAM
 	void userEvent(ofxOpenNIUserEvent & event);
+#endif
 	
 #ifdef USE_MAC_CAM
 
