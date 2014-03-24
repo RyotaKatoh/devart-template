@@ -32,6 +32,9 @@ public:
     void draw(int x, int y);
     
     void keyPressed(int key);
+    void mouseDragged(int x, int y, int button);
+    void mousePressed(int x, int y, int button);
+    void mouseReleased(int x, int y, int button);
 	
     void setRgbaImageTOBgraImage(ofImage *,const unsigned char *,int w, int h);
     void setMarker(double lat, double lng);
@@ -44,8 +47,8 @@ public:
     /* set JS Variables */
     void setLatLngBounds();
     void setNumLine();
-    
     void setDebugVal();
+    void setTotalDistance();
     
     void setRandomMarker(int numMarker);
     
@@ -61,6 +64,7 @@ public:
     
     int     debugVal;
     
+    double  totalDistance;
 };
 
 

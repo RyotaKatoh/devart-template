@@ -515,13 +515,20 @@ void testApp::keyPressed( int key ) {
 
 //--------------------------------------------------------------
 void testApp::mouseDragged(int x, int y, int button) {
+    
+    myAwesomium.mouseDragged(x-CAM_FRAME_SIZE_WIDTH, y, button);
 
 }
 
 void testApp::mousePressed(int x, int y, int button) {
 
+    myAwesomium.mousePressed(x-CAM_FRAME_SIZE_WIDTH, y, button);
+    
 }
 
 void testApp::mouseReleased(int x, int y, int button) {
 
+    myAwesomium.mouseReleased(x-CAM_FRAME_SIZE_WIDTH, y, button);
+    
+    
 }

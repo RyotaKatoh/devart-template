@@ -29,6 +29,8 @@ void ofxAwesomium::setup(int windowWidth, int windowHeight){
     
     isReadBoundsInfo = false;
     
+    totalDistance    = 0.0;
+    
     /* webImage is to draw webView image. */
     webImage.allocate(webViewWidth, webViewHeigh, OF_IMAGE_COLOR_ALPHA);
 
@@ -211,6 +213,7 @@ void ofxAwesomium::setRandomMarker(int numMarker){
     
 }
 
+
 //--------------------------------------------------------------
 void ofxAwesomium::keyPressed(int key){
     
@@ -240,6 +243,32 @@ void ofxAwesomium::keyPressed(int key){
     }
     
 }
+
+//--------------------------------------------------------------
+
+void ofxAwesomium::mouseDragged(int x, int y, int button){
+
+    webView->InjectMouseMove(x, y);
+}
+
+void ofxAwesomium::mousePressed(int x, int y, int button){
+
+    webView->InjectMouseMove(x, y);
+    webView->InjectMouseDown(kMouseButton_Left);
+    
+    
+}
+
+void ofxAwesomium::mouseReleased(int x, int y, int button){
+
+    webView->InjectMouseUp(kMouseButton_Left);
+    
+#pragma mark TODO wayPointsとmaxLatLngとかの初期化
+    
+    
+}
+
+//--------------------------------------------------------------
 
 void ofxAwesomium::setLatLngBounds(){
    
@@ -276,6 +305,19 @@ void ofxAwesomium::setNumLine(){
     
 }
 
+
+/* return meter distance. */
+void ofxAwesomium::setTotalDistance(){
+    
+    WebString func = WSLit("getTotalDistance();");
+    WebString xpath = WSLit("");
+    JSValue myValue = webView->ExecuteJavascriptWithResult(func, xpath);
+    
+    totalDistance = myValue.ToDouble();
+    
+    
+}
+
 void ofxAwesomium::setDebugVal(){
     
     WebString func = WSLit("getDebugVal();");
@@ -286,5 +328,6 @@ void ofxAwesomium::setDebugVal(){
     debugVal = myValue.ToInteger();
     
 //    printf("debugVal: %d\n", debugVal);
+    
     
 }

@@ -271,6 +271,8 @@ function resetWaypoints(){
 
 var drawingLineNumber = 0;
 
+var totalDistance = 0.0;
+
 function drawFaceWithDirection(){
 
     directionDisplay = new google.maps.DirectionsRenderer({
@@ -328,6 +330,11 @@ function drawFaceWithDirection(){
 
             directionDisplayArray[numDirectionDisplay - 1].setDirections(response);
             
+            // add distance
+            totalDistance += response.routes[0].legs[0].distance.value;
+            
+            console.log("totalDistance: " + totalDistance);
+            
             drawingLineNumber ++;
             console.log("num line:" + drawingLineNumber);
             console.log("numLine;" + numLine);
@@ -347,6 +354,12 @@ function drawFaceWithDirection(){
 
     });
      
+}
+
+function getTotalDistance(){
+
+    return totalDistance;
+    
 }
 
 
