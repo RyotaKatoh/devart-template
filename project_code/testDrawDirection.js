@@ -266,6 +266,9 @@ function resetWaypoints(){
     numLine = 0;
     wayPoints[numLine] = [];
     
+    drawingLineNumber = 0;
+    totalDistance = 0.0;
+    
     
 }
 

@@ -60,6 +60,12 @@ void testApp::setup() {
 
     frameRate = 0;
     drawFlag  = false;
+    
+    
+    /* debug area please comment out */
+//    fp = fopen("setwaypoints.txt","wt");
+    
+    
 
 }
 
@@ -191,6 +197,9 @@ void testApp::update() {
 
 //--------------------------------------------------------------
 void testApp::updateWaypoints(void) {
+    
+    int span = 1;
+    
 	for (int i = 0; i < waypoints.size(); i++) {
 		waypoints[i].clear();
 	}
@@ -202,7 +211,7 @@ void testApp::updateWaypoints(void) {
 		}
 		vector <ofPoint> tmpPoint;
 		int cnt = 0;
-		for (int j = 0; j < contFinder.getContour(i).size(); j += 3) {
+		for (int j = 0; j < contFinder.getContour(i).size(); j += span) {
 			ofPoint point;
 			point.x = (float)contFinder.getContours()[i][j].x / mask.width;		// normalized
 			point.y = (float)contFinder.getContours()[i][j].y / mask.height;
@@ -437,6 +446,8 @@ void testApp::setWaypoints(){
         }
     }
     
+    cout<<"waypoints size:"<<waypoints.size()<<endl;
+    
     cout<<"finished set mark"<<endl;
 
     
@@ -469,6 +480,18 @@ void testApp::keyPressed( int key ) {
         
     }
     
+    if(key == '1'){
+        
+        myAwesomium.mapZoomUp();
+    
+    }
+    
+    if(key == '2'){
+     
+        myAwesomium.mapZoomDown();
+        
+    }
+    
 	
 #else /* ifdef USE_MAC_CAM */
 	switch (key) {
@@ -489,6 +512,14 @@ void testApp::keyPressed( int key ) {
             
         case 'r':
             myAwesomium.resetMap();
+            break;
+            
+        case '1':
+            myAwesomium.mapZoomUp();
+            break;
+            
+        case '2':
+            myAwesomium.mapZoomDown();
             break;
             
 	}

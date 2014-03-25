@@ -89,5 +89,8 @@ public:
     
     /* debug variables */
     int frameRate;
-    bool drawFlag;    
+    bool drawFlag;
+    FILE *fp;
+    
+    
 };

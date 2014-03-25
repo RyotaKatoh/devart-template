@@ -32,17 +32,16 @@ public:
     void draw(int x, int y);
     
     void keyPressed(int key);
+    
+    /* map move functions */
     void mouseDragged(int x, int y, int button);
     void mousePressed(int x, int y, int button);
     void mouseReleased(int x, int y, int button);
-	
+    void mapZoomUp();
+    void mapZoomDown();
+    
     void setRgbaImageTOBgraImage(ofImage *,const unsigned char *,int w, int h);
-    void setMarker(double lat, double lng);
-    void drawDirection();
-    void resetMarker();
-    void resetMap();
-    void setMarkerOfWaypoint(double lat, double lng,int flag);
-    void drawFaceWithDirection();
+
     
     /* set JS Variables */
     void setLatLngBounds();
@@ -51,6 +50,15 @@ public:
     void setTotalDistance();
     
     void setRandomMarker(int numMarker);
+    
+    /* boridge of JS Function */
+    void setMarker(double lat, double lng);
+    void drawDirection();
+    void resetMarker();
+    void resetMap();
+    void setMarkerOfWaypoint(double lat, double lng,int flag);
+    void drawFaceWithDirection();
+    void resetWaypoints();
     
     WebCore *webCore;
     WebView *webView;

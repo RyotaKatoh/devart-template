@@ -198,6 +198,15 @@ void ofxAwesomium::resetMap(){
     
 }
 
+void ofxAwesomium::resetWaypoints(){
+    WebString func = WSLit("resetWaypoints();");
+    WebString xpath = WSLit("");
+    
+    webView->ExecuteJavascript(func, xpath);
+    
+    
+}
+
 void ofxAwesomium::setRandomMarker(int numMarker){
 
     for(int i=0;i<numMarker;i++){
@@ -265,6 +274,24 @@ void ofxAwesomium::mouseReleased(int x, int y, int button){
     
 #pragma mark TODO wayPointsとmaxLatLngとかの初期化
     
+    setLatLngBounds();
+    resetWaypoints();
+    
+    
+    
+}
+
+void ofxAwesomium::mapZoomUp(){
+
+    webView->InjectMouseMove(webViewWidth/2, webViewHeigh/2);
+    webView->InjectMouseWheel(1, 0);
+
+}
+
+void ofxAwesomium::mapZoomDown(){
+
+    webView->InjectMouseMove(webViewWidth/2, webViewHeigh/2);
+    webView->InjectMouseWheel(-1, 0);
     
 }
 
