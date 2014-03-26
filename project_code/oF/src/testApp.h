@@ -9,7 +9,7 @@
 
 //--------------------------------------------------------------
 
-#define	USE_MAC_CAM
+//#define	USE_MAC_CAM
 
 #ifndef USE_MAC_CAM
 #include "ofxOpenNI.h"

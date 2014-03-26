@@ -43,7 +43,7 @@ void testApp::setup() {
 #endif /* ifdef USE_MAC_CAM */
 	
 	isShot = false;
-	contFinder.setFindHoles(false);
+	contFinder.setFindHoles(true);
 
 #ifdef SIM_RENDERING
 	simRenderStep = 1;
@@ -198,7 +198,7 @@ void testApp::update() {
 //--------------------------------------------------------------
 void testApp::updateWaypoints(void) {
     
-    int span = 1;
+    int span = 3;
     
 	for (int i = 0; i < waypoints.size(); i++) {
 		waypoints[i].clear();
