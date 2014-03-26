@@ -31,7 +31,7 @@ void testApp::setup() {
 		kinect[deviceID].start();
     }
     
-    kinect[0].setMaxNumUsers(1); // defualt is 4
+    kinect[0].setMaxNumUsers(MAX_USERS); // defualt is 4
     ofAddListener(kinect[0].userEvent, this, &testApp::userEvent);
     
     ofxOpenNIUser user;
@@ -155,6 +155,7 @@ void testApp::update() {
 		kinect[deviceID].update();
 	}
 	
+<<<<<<< HEAD
     if (isShot) {
         // user recognition
         int numUsers = kinect[0].getNumTrackedUsers();
@@ -174,6 +175,31 @@ void testApp::update() {
         if (mask.isAllocated()) {
             contFinder.findContours(mask);
         }
+=======
+	// user recognition
+	int numUsers = kinect[0].getNumTrackedUsers();
+	for (int nID = 0; nID < numUsers; nID++){
+		ofxOpenNIUser & user = kinect[0].getTrackedUser(nID);
+		if (user.isTracking()) {
+			if (!userMasks[nID].isAllocated()) {
+				userMasks[nID].allocate(user.getMaskPixels().getWidth(), user.getMaskPixels().getHeight(), OF_IMAGE_GRAYSCALE);
+			}
+			userMasks[nID].setFromPixels(user.getMaskPixels().getChannel(3));
+			invert(userMasks[nID]);
+			
+			if (!mask.isAllocated()) {
+				mask.allocate(userMasks[nID].getWidth(), userMasks[nID].getHeight(), OF_IMAGE_GRAYSCALE);
+			}
+			absdiff(mask, userMasks[nID], mask);
+		}
+	}
+	
+	// contours finding
+	contFinder.setAutoThreshold(true);
+	if (mask.isAllocated()) {
+		contFinder.findContours(mask);
+	}
+>>>>>>> 01fe30d374aaf1dba0b2b8135c3d30c8af2540d2
 	
 //	if (isShot) {
 		isShot = false;
