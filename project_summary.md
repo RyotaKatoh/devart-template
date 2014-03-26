@@ -13,9 +13,6 @@ Did they send the signs to aliens? I don’t know.
 Our project “Nazca” draw the geoglyph of your face.
 How about sending your face image to aliens?
 
-## Link to Prototype
-coming soon.
-
 ## Example Code
 coming soon.
 
@@ -26,3 +23,5 @@ coming soon.
 ## Images & Videos
 
 ![Nazca Image](project_images/cover.jpg?raw=true “Nazca Image")
+
+https://www.youtube.com/watch?v=znuwt7D10-s

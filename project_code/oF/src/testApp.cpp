@@ -155,26 +155,27 @@ void testApp::update() {
 		kinect[deviceID].update();
 	}
 	
-	// user recognition
-	int numUsers = kinect[0].getNumTrackedUsers();
-	for (int nID = 0; nID < numUsers; nID++){
-		ofxOpenNIUser & user = kinect[0].getTrackedUser(nID);
-		if (user.isTracking()) {
-			if (!mask.isAllocated()) {
-				mask.allocate(user.getMaskPixels().getWidth(), user.getMaskPixels().getHeight(), OF_IMAGE_GRAYSCALE);
-			}
-			mask.setFromPixels(user.getMaskPixels().getChannel(3));
-			invert(mask);
-		}
-	}
+    if (isShot) {
+        // user recognition
+        int numUsers = kinect[0].getNumTrackedUsers();
+        for (int nID = 0; nID < numUsers; nID++){
+            ofxOpenNIUser & user = kinect[0].getTrackedUser(nID);
+            if (user.isTracking()) {
+                if (!mask.isAllocated()) {
+                    mask.allocate(user.getMaskPixels().getWidth(), user.getMaskPixels().getHeight(), OF_IMAGE_GRAYSCALE);
+                }
+                mask.setFromPixels(user.getMaskPixels().getChannel(3));
+                invert(mask);
+            }
+        }
+        
+        // contours finding
+        contFinder.setAutoThreshold(true);
+        if (mask.isAllocated()) {
+            contFinder.findContours(mask);
+        }
 	
-	// contours finding
-	contFinder.setAutoThreshold(true);
-	if (mask.isAllocated()) {
-		contFinder.findContours(mask);
-	}
-	
-	if (isShot) {
+//	if (isShot) {
 		isShot = false;
 		
 		updateWaypoints();
