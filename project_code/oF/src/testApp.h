@@ -32,6 +32,7 @@
 #define SIM_SPEED_STEP		0.25
 
 #define MAX_DEVICES 2
+#define MAX_USERS	2
 
 
 //--------------------------------------------------------------
@@ -68,6 +69,7 @@ public:
 #else /* ifdef USE_MAC_CAM */
 	int			numDevices;
 	ofxOpenNI	kinect[MAX_DEVICES];
+	ofImage		userMasks[MAX_USERS];
 	ofImage		mask;
 #endif /* ifdef USE_MAC_CAM */
 

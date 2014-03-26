@@ -31,7 +31,7 @@ void testApp::setup() {
 		kinect[deviceID].start();
     }
     
-    kinect[0].setMaxNumUsers(1); // defualt is 4
+    kinect[0].setMaxNumUsers(MAX_USERS); // defualt is 4
     ofAddListener(kinect[0].userEvent, this, &testApp::userEvent);
     
     ofxOpenNIUser user;
@@ -160,11 +160,16 @@ void testApp::update() {
 	for (int nID = 0; nID < numUsers; nID++){
 		ofxOpenNIUser & user = kinect[0].getTrackedUser(nID);
 		if (user.isTracking()) {
-			if (!mask.isAllocated()) {
-				mask.allocate(user.getMaskPixels().getWidth(), user.getMaskPixels().getHeight(), OF_IMAGE_GRAYSCALE);
+			if (!userMasks[nID].isAllocated()) {
+				userMasks[nID].allocate(user.getMaskPixels().getWidth(), user.getMaskPixels().getHeight(), OF_IMAGE_GRAYSCALE);
 			}
-			mask.setFromPixels(user.getMaskPixels().getChannel(3));
-			invert(mask);
+			userMasks[nID].setFromPixels(user.getMaskPixels().getChannel(3));
+			invert(userMasks[nID]);
+			
+			if (!mask.isAllocated()) {
+				mask.allocate(userMasks[nID].getWidth(), userMasks[nID].getHeight(), OF_IMAGE_GRAYSCALE);
+			}
+			absdiff(mask, userMasks[nID], mask);
 		}
 	}
 	
