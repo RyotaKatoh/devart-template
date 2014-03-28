@@ -4,8 +4,7 @@
             "Maps"
         ],
         "platforms": [
-            "Mac OS X”,
-            "Kinect”
+            "Mac OS X”
         ],
         "toolkits": [
             "openFrameworks",
