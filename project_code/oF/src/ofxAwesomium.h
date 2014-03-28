@@ -17,7 +17,7 @@
 #include <Awesomium/BitmapSurface.h>
 
 
-#define URL     "http://127.0.0.1:49514/testDrawDirection.html"
+#define URL     "http://127.0.0.1:49514/nazca.html"
 
 #define MAX_POINT   10
 
@@ -48,6 +48,7 @@ public:
     void setNumLine();
     void setDebugVal();
     void setTotalDistance();
+    void setDrawingLineNumber();
     
     void setRandomMarker(int numMarker);
     
@@ -69,6 +70,7 @@ public:
     bool    isReadBoundsInfo;
     double  maxLat, maxLng, minLat, minLng;
     int     numLine;
+    int     drawingLineNumber;
     
     int     debugVal;
     

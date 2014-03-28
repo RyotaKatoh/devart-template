@@ -120,27 +120,10 @@ void testApp::update() {
 			}
 			mask.resize(mask.width * maskFrameScale, mask.height * maskFrameScale);
 			
-//<<<<<<< HEAD
-//#ifdef SIM_RENDERING
-//			if ( MAP_FRAME_SIZE_WIDTH > MAP_FRAME_SIZE_HEIGHT ) {
-//				simRenderScale = (float)MAP_FRAME_SIZE_HEIGHT;
-//				simRenderOffset.x = CAM_FRAME_SIZE_WIDTH + (MAP_FRAME_SIZE_WIDTH - simRenderScale) / 2;
-//				simRenderOffset.y = 0;
-//			} else {
-//				simRenderScale = (float)MAP_FRAME_SIZE_WIDTH;
-//				simRenderOffset.x = 0;
-//				simRenderOffset.y = CAM_FRAME_SIZE_HEIGHT + (MAP_FRAME_SIZE_HEIGHT - simRenderScale) / 2;
-//			}
-//			simRenderPointCnt = 0.0;
-//#endif
-//
-//            
-//        }
-//=======
 			updateSimRenderingSettings();
 		}
 //		// resizing
-//>>>>>>> 2241090b5b218f8dd5e831475f55b9da4f3187ed
+
 		cam.resize(CAM_FRAME_SIZE_WIDTH, CAM_FRAME_SIZE_HEIGHT);
 			
 		faceRect.x *= ((float)CAM_FRAME_SIZE_WIDTH / CAM_WIDTH);
@@ -155,18 +138,29 @@ void testApp::update() {
 		kinect[deviceID].update();
 	}
 	
-<<<<<<< HEAD
     if (isShot) {
         // user recognition
+        mask.clear();
         int numUsers = kinect[0].getNumTrackedUsers();
         for (int nID = 0; nID < numUsers; nID++){
             ofxOpenNIUser & user = kinect[0].getTrackedUser(nID);
-            if (user.isTracking()) {
-                if (!mask.isAllocated()) {
-                    mask.allocate(user.getMaskPixels().getWidth(), user.getMaskPixels().getHeight(), OF_IMAGE_GRAYSCALE);
+            if (user.isSkeleton()) {
+                if (!userMasks[nID].isAllocated()) {
+                    userMasks[nID].allocate(user.getMaskPixels().getWidth(), user.getMaskPixels().getHeight(), OF_IMAGE_GRAYSCALE);
                 }
-                mask.setFromPixels(user.getMaskPixels().getChannel(3));
-                invert(mask);
+                userMasks[nID].setFromPixels(user.getMaskPixels().getChannel(3));
+                invert(userMasks[nID]);
+                
+                if (!tmp.isAllocated()) {
+                    tmp.allocate(user.getMaskPixels().getWidth(), user.getMaskPixels().getHeight(), OF_IMAGE_GRAYSCALE);
+                }
+                if (!mask.isAllocated()) {
+                    mask.allocate(userMasks[nID].getWidth(), userMasks[nID].getHeight(), OF_IMAGE_GRAYSCALE);
+                    mask.setFromPixels(userMasks[nID]);
+                    continue;
+                }
+                bitwise_or(mask, userMasks[nID], tmp);
+                mask.setFromPixels(tmp);
             }
         }
         
@@ -175,33 +169,7 @@ void testApp::update() {
         if (mask.isAllocated()) {
             contFinder.findContours(mask);
         }
-=======
-	// user recognition
-	int numUsers = kinect[0].getNumTrackedUsers();
-	for (int nID = 0; nID < numUsers; nID++){
-		ofxOpenNIUser & user = kinect[0].getTrackedUser(nID);
-		if (user.isTracking()) {
-			if (!userMasks[nID].isAllocated()) {
-				userMasks[nID].allocate(user.getMaskPixels().getWidth(), user.getMaskPixels().getHeight(), OF_IMAGE_GRAYSCALE);
-			}
-			userMasks[nID].setFromPixels(user.getMaskPixels().getChannel(3));
-			invert(userMasks[nID]);
-			
-			if (!mask.isAllocated()) {
-				mask.allocate(userMasks[nID].getWidth(), userMasks[nID].getHeight(), OF_IMAGE_GRAYSCALE);
-			}
-			absdiff(mask, userMasks[nID], mask);
-		}
-	}
 	
-	// contours finding
-	contFinder.setAutoThreshold(true);
-	if (mask.isAllocated()) {
-		contFinder.findContours(mask);
-	}
->>>>>>> 01fe30d374aaf1dba0b2b8135c3d30c8af2540d2
-	
-//	if (isShot) {
 		isShot = false;
 		
 		updateWaypoints();
@@ -218,6 +186,17 @@ void testApp::update() {
 #endif /* ifdef SIM_RENDERING */
     
     myAwesomium.update();
+    
+    if(drawFlag){
+    
+        myAwesomium.setDrawingLineNumber();
+        if(myAwesomium.drawingLineNumber == waypoints.size()){
+        
+            cout<<"drawing has finished!"<<endl;
+            drawFlag = false;
+            
+        }
+    }
 
 }
 
@@ -472,8 +451,7 @@ void testApp::setWaypoints(){
             }
         }
     }
-    
-    cout<<"waypoints size:"<<waypoints.size()<<endl;
+
     
     cout<<"finished set mark"<<endl;
 
@@ -533,6 +511,7 @@ void testApp::keyPressed( int key ) {
             break;
 		
 		case 'a':
+            drawFlag = true;
             setWaypoints();
             myAwesomium.drawFaceWithDirection();
 			break;

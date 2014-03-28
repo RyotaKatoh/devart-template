@@ -174,8 +174,7 @@ void ofxAwesomium::drawDirection(){
     
     char message[128];
     returnMessage.ToUTF8(message, 128);
-    
-    cout<<message<<endl;
+
     
     
 }
@@ -329,6 +328,17 @@ void ofxAwesomium::setNumLine(){
     numLine = myValue.ToInteger();
         
 //    printf("numLine: %d\n",numLine);
+    
+}
+
+void ofxAwesomium::setDrawingLineNumber(){
+    
+    WebString func = WSLit("getDrawingLineNumber();");
+    WebString xpath = WSLit("");
+    JSValue myValue = webView->ExecuteJavascriptWithResult(func, xpath);
+    
+    
+    drawingLineNumber = myValue.ToInteger();
     
 }
 

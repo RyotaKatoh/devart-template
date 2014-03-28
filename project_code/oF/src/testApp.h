@@ -71,6 +71,7 @@ public:
 	ofxOpenNI	kinect[MAX_DEVICES];
 	ofImage		userMasks[MAX_USERS];
 	ofImage		mask;
+    ofImage     tmp;
 #endif /* ifdef USE_MAC_CAM */
 
 	bool	isShot;
@@ -88,10 +89,10 @@ public:
     ofxAwesomium    myAwesomium;
     ofPoint         awesomiumOffset;
     float           awesomiumScale;
+    bool drawFlag;
     
     /* debug variables */
     int frameRate;
-    bool drawFlag;
     FILE *fp;
     
     
