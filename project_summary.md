@@ -43,6 +43,7 @@ for (int nID = 0; nID < numUsers; nID++){
 ## Links to External Libraries
 
 [Awesomium](http://www.awesomium.com/ “Awesomium”)
+[ofxOpenNI](https://github.com/gameoverhack/ofxOpenNI)
 
 ## Images & Videos
 
